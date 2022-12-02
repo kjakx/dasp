@@ -7,9 +7,9 @@
 //! - [equilibrium](./fn.equilibrium.html) for generating "silent" frames.
 //! - [phase](./fn.phase.html) for a stepping phase, useful for oscillators.
 //! - [sine](./fn.sine.html) for generating a sine waveform.
-//! - [triangle](./fn.triangle.html) for generating a triangle waveform.
 //! - [saw](./fn.saw.html) for generating a sawtooth waveform.
 //! - [square](./fn.square.html) for generating a square waveform.
+//! - [triangle](./fn.triangle.html) for generating a triangle waveform.
 //! - [noise](./fn.noise.html) for generating a noise waveform.
 //! - [noise_simplex](./fn.noise_simplex.html) for generating a 1D simplex noise waveform.
 //! - [gen](./fn.gen.html) for generating frames of type F from some `Fn() -> F`.
@@ -937,12 +937,6 @@ pub struct Sine<S> {
     phase: Phase<S>,
 }
 
-/// A triangle wave signal generator.
-#[derive(Clone)]
-pub struct Triangle<S> {
-    phase: Phase<S>,
-}
-
 /// A saw wave signal generator.
 #[derive(Clone)]
 pub struct Saw<S> {
@@ -952,6 +946,12 @@ pub struct Saw<S> {
 /// A square wave signal generator.
 #[derive(Clone)]
 pub struct Square<S> {
+    phase: Phase<S>,
+}
+
+/// A triangle wave signal generator.
+#[derive(Clone)]
+pub struct Triangle<S> {
     phase: Phase<S>,
 }
 
@@ -1486,26 +1486,6 @@ pub fn sine<S>(phase: Phase<S>) -> Sine<S> {
     Sine { phase: phase }
 }
 
-/// Produces a `Signal` that yields a triangle wave oscillating at the given hz.
-///
-/// # Example
-///
-/// ```rust
-/// use dasp_signal::{self as signal, Signal};
-///
-/// fn main() {
-///     // Generates a triangle wave signal at 1hz to be sampled 4 times per second.
-///     let mut signal = signal::rate(4.0).const_hz(1.0).triangle();
-///     assert_eq!(signal.next(), -1.0);
-///     assert_eq!(signal.next(), 0.0);
-///     assert_eq!(signal.next(), 1.0);
-///     assert_eq!(signal.next(), 0.0);
-/// }
-/// ```
-pub fn triangle<S>(phase: Phase<S>) -> Triangle<S> {
-    Triangle { phase: phase }
-}
-
 /// Produces a `Signal` that yields a saw wave oscillating at the given hz.
 ///
 /// # Example
@@ -1544,6 +1524,26 @@ pub fn saw<S>(phase: Phase<S>) -> Saw<S> {
 /// ```
 pub fn square<S>(phase: Phase<S>) -> Square<S> {
     Square { phase: phase }
+}
+
+/// Produces a `Signal` that yields a triangle wave oscillating at the given hz.
+///
+/// # Example
+///
+/// ```rust
+/// use dasp_signal::{self as signal, Signal};
+///
+/// fn main() {
+///     // Generates a triangle wave signal at 1hz to be sampled 4 times per second.
+///     let mut signal = signal::rate(4.0).const_hz(1.0).triangle();
+///     assert_eq!(signal.next(), -1.0);
+///     assert_eq!(signal.next(), 0.0);
+///     assert_eq!(signal.next(), 1.0);
+///     assert_eq!(signal.next(), 0.0);
+/// }
+/// ```
+pub fn triangle<S>(phase: Phase<S>) -> Triangle<S> {
+    Triangle { phase: phase }
 }
 
 /// Produces a `Signal` that yields random values between -1.0..1.0.
@@ -1780,23 +1780,6 @@ where
     }
 }
 
-impl<S> Signal for Triangle<S>
-where
-    S: Step,
-{
-    type Frame = f64;
-
-    #[inline]
-    fn next(&mut self) -> Self::Frame {
-        let phase = self.phase.next_phase();
-        if phase < 0.5 {
-            4.0 * phase - 1.0
-        } else {
-            -4.0 * phase + 3.0
-        }
-    }
-}
-
 impl<S> Signal for Saw<S>
 where
     S: Step,
@@ -1823,6 +1806,23 @@ where
             1.0
         } else {
             -1.0
+        }
+    }
+}
+
+impl<S> Signal for Triangle<S>
+where
+    S: Step,
+{
+    type Frame = f64;
+
+    #[inline]
+    fn next(&mut self) -> Self::Frame {
+        let phase = self.phase.next_phase();
+        if phase < 0.5 {
+            4.0 * phase - 1.0
+        } else {
+            -4.0 * phase + 3.0
         }
     }
 }
@@ -1877,12 +1877,6 @@ where
         self.phase().sine()
     }
 
-    /// A composable alternative to the `signal::triangle` function.
-    #[inline]
-    pub fn triangle(self) -> Triangle<Self> {
-        self.phase().triangle()
-    }
-
     /// A composable alternative to the `signal::saw` function.
     #[inline]
     pub fn saw(self) -> Saw<Self> {
@@ -1893,6 +1887,12 @@ where
     #[inline]
     pub fn square(self) -> Square<Self> {
         self.phase().square()
+    }
+
+    /// A composable alternative to the `signal::triangle` function.
+    #[inline]
+    pub fn triangle(self) -> Triangle<Self> {
+        self.phase().triangle()
     }
 
     /// A composable alternative to the `signal::noise_simplex` function.
@@ -1996,12 +1996,6 @@ where
         sine(self)
     }
 
-    /// A composable version of the `signal::triangle` function.
-    #[inline]
-    pub fn triangle(self) -> Triangle<S> {
-        triangle(self)
-    }
-
     /// A composable version of the `signal::saw` function.
     #[inline]
     pub fn saw(self) -> Saw<S> {
@@ -2014,6 +2008,12 @@ where
         square(self)
     }
 
+    /// A composable version of the `signal::triangle` function.
+    #[inline]
+    pub fn triangle(self) -> Triangle<S> {
+        triangle(self)
+    }
+    
     /// A composable version of the `signal::noise_simplex` function.
     #[inline]
     pub fn noise_simplex(self) -> NoiseSimplex<S> {

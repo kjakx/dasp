@@ -123,6 +123,7 @@ including:
 - `Equilibrium` (silent signal)
 - `Phase`
 - `Sine`
+- `Triangle`
 - `Saw`
 - `Square`
 - `Noise`
