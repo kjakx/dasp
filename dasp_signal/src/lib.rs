@@ -1915,12 +1915,6 @@ impl ConstHz {
         self.phase().sine()
     }
 
-    /// A composable alternative to the `signal::triangle` function.
-    #[inline]
-    pub fn triangle(self) -> Triangle<Self> {
-        self.phase().triangle()
-    }
-
     /// A composable alternative to the `signal::saw` function.
     #[inline]
     pub fn saw(self) -> Saw<Self> {
@@ -1931,6 +1925,12 @@ impl ConstHz {
     #[inline]
     pub fn square(self) -> Square<Self> {
         self.phase().square()
+    }
+
+    /// A composable alternative to the `signal::triangle` function.
+    #[inline]
+    pub fn triangle(self) -> Triangle<Self> {
+        self.phase().triangle()
     }
 
     /// A composable alternative to the `signal::noise_simplex` function.
