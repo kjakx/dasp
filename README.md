@@ -123,9 +123,9 @@ including:
 - `Equilibrium` (silent signal)
 - `Phase`
 - `Sine`
-- `Triangle`
 - `Saw`
 - `Square`
+- `Triangle`
 - `Noise`
 - `NoiseSimplex`
 - `Gen` (generate frames from a Fn() -> F)
