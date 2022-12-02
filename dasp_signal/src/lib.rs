@@ -7,6 +7,7 @@
 //! - [equilibrium](./fn.equilibrium.html) for generating "silent" frames.
 //! - [phase](./fn.phase.html) for a stepping phase, useful for oscillators.
 //! - [sine](./fn.sine.html) for generating a sine waveform.
+//! - [triangle](./fn.triangle.html) for generating a triangle waveform.
 //! - [saw](./fn.saw.html) for generating a sawtooth waveform.
 //! - [square](./fn.square.html) for generating a square waveform.
 //! - [noise](./fn.noise.html) for generating a noise waveform.
