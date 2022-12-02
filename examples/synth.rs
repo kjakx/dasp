@@ -32,6 +32,7 @@ where
         .take(one_sec)
         .chain(hz.clone().saw().take(one_sec))
         .chain(hz.clone().square().take(one_sec))
+        .chain(hz.clone().triangle().take(one_sec))
         .chain(hz.clone().noise_simplex().take(one_sec))
         .chain(signal::noise(0).take(one_sec))
         .map(|s| s.to_sample::<f32>() * 0.2);
