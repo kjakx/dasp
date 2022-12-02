@@ -1461,7 +1461,7 @@ where
 /// sampled.
 ///
 /// This is necessary for composing `Hz` or `ConstHz`, both of which may be used to step forward
-/// the `Phase` for some kind of oscillator (i.e. `Sine`, `Triangle`, `Saw`, `Square` or `NoiseSimplex`).
+/// the `Phase` for some kind of oscillator (i.e. `Sine`, `Saw`, `Square`, `Triangle` or `NoiseSimplex`).
 pub fn rate(hz: f64) -> Rate {
     Rate { hz: hz }
 }
